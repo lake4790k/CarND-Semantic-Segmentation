@@ -5,7 +5,6 @@ import warnings
 from distutils.version import LooseVersion
 import project_tests as tests
 import argparse
-from tqdm import tqdm, trange
 
 # Check TensorFlow Version
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
@@ -109,11 +108,11 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param keep_prob: TF Placeholder for dropout keep probability
     :param learning_rate: TF Placeholder for learning rate
     """
-    for epoch in trange(epochs):
+    for epoch in range(epochs):
         for batch, (image, label) in enumerate(get_batches_fn(batch_size)):
             feed_dict = {input_image: image, correct_label: label, keep_prob: 0.5, learning_rate: 1e-4}
             _, loss = sess.run([train_op, cross_entropy_loss], feed_dict=feed_dict)
-            tqdm.write('loss=', loss)
+            print(epoch, ' / ', epochs, ' loss=', loss)
 
 tests.test_train_nn(train_nn)
 
